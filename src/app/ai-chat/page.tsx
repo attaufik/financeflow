@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Sparkles, Camera, Send, ImagePlus, Bot, User, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { DbAccount, DbCategory } from "@/types/database";
@@ -19,7 +19,7 @@ export default function AIChatPage() {
     {
       id: "welcome",
       sender: "assistant",
-      text: "Halo Taufik! Saya AI Financial Copilot Anda. Saya dapat membantu mencatat keuangan Anda secara otomatis:",
+      text: "Halo Taufik! Saya AI Financial Copilot Anda. Anda bisa memerintahkan saya untuk mengupdate saldo atau mencatat pengeluaran secara instan:",
     },
   ]);
   const [inputText, setInputText] = useState("");
@@ -32,17 +32,18 @@ export default function AIChatPage() {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Load data akun & kategori untuk AI
-  useEffect(() => {
-    async function loadMetadata() {
-      const [accRes, catRes] = await Promise.all([
-        supabase.from("accounts").select("*"),
-        supabase.from("categories").select("*"),
-      ]);
-      if (accRes.data) setAccounts(accRes.data);
-      if (catRes.data) setCategories(catRes.data);
-    }
-    loadMetadata();
+  const loadMetadata = useCallback(async () => {
+    const [accRes, catRes] = await Promise.all([
+      supabase.from("accounts").select("*").order("name", { ascending: true }),
+      supabase.from("categories").select("*").order("name", { ascending: true }),
+    ]);
+    if (accRes.data) setAccounts(accRes.data);
+    if (catRes.data) setCategories(catRes.data);
   }, []);
+
+  useEffect(() => {
+    loadMetadata();
+  }, [loadMetadata]);
 
   // Auto scroll ke bawah
   useEffect(() => {
@@ -68,8 +69,8 @@ export default function AIChatPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           text: text.trim(),
-          accounts: accounts.map((a) => ({ id: a.id, name: a.name })),
-          categories: categories.map((c) => ({ id: c.id, name: c.name })),
+          accounts: accounts.map((a) => ({ id: a.id, name: a.name, balance: a.balance })),
+          categories: categories.map((c) => ({ id: c.id, name: c.name, type: c.type })),
         }),
       });
 
@@ -77,12 +78,19 @@ export default function AIChatPage() {
 
       const parsedData: ParsedTransaction = await res.json();
 
+      let assistantResponse = "Saya telah mendeteksi transaksi Anda. Silakan periksa kartu konfirmasi berikut sebelum disimpan:";
+      if (parsedData.type === "income" || parsedData.action_intent === "add_balance") {
+        assistantResponse = `Saya mendeteksi perintah penambahan saldo untuk ${parsedData.account_name || "akun Anda"}. Silakan periksa kartu konfirmasi penambahan saldo di bawah:`;
+      } else if (parsedData.action_intent === "reduce_balance") {
+        assistantResponse = `Saya mendeteksi perintah pengurangan saldo untuk ${parsedData.account_name || "akun Anda"}. Silakan periksa kartu konfirmasi pemotongan saldo di bawah:`;
+      }
+
       setMessages((prev) => [
         ...prev,
         {
           id: (Date.now() + 1).toString(),
           sender: "assistant",
-          text: `Saya telah mendeteksi transaksi dari kalimat Anda. Silakan periksa kartu konfirmasi berikut sebelum disimpan:`,
+          text: assistantResponse,
           parsedTx: parsedData,
         },
       ]);
@@ -93,7 +101,7 @@ export default function AIChatPage() {
         {
           id: (Date.now() + 1).toString(),
           sender: "assistant",
-          text: "Maaf, saya belum dapat memahami transaksi dari teks tersebut. Silakan coba lagi dengan format seperti 'Beli bensin 50rb pakai DANA'.",
+          text: "Maaf, saya belum dapat memahami perintah tersebut. Coba kalimat seperti 'Tambah saldo BCA 500rb' atau 'Kurangi saldo GoPay 50rb'.",
         },
       ]);
     } finally {
@@ -171,7 +179,6 @@ export default function AIChatPage() {
     };
 
     reader.readAsDataURL(file);
-    // Reset file input agar bisa upload file yang sama kembali
     e.target.value = "";
   };
 
@@ -187,12 +194,12 @@ export default function AIChatPage() {
             <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
               <span>AI Financial Copilot</span>
               <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full neu-pressed-sm text-emerald-700">
-                Vision AI
+                Vision & Balance AI
               </span>
             </h3>
             <p className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1.5 mt-0.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Siap membaca foto struk belanjaan & mencatat pengeluaran
+              Perintah tambah/kurang saldo, foto struk, & catat mutasi otomatis
             </p>
           </div>
         </div>
@@ -235,9 +242,10 @@ export default function AIChatPage() {
                     <p>{msg.text}</p>
                     {msg.id === "welcome" && (
                       <ul className="text-xs text-slate-600 font-medium space-y-1.5 list-disc list-inside mt-2.5">
-                        <li>Kirim foto struk belanjaan untuk dicatat otomatis.</li>
-                        <li>Ketik teks cepat, misal: <i>&quot;Beli bensin 50rb pakai DANA&quot;</i>.</li>
-                        <li>Konfirmasi data sebelum transaksi masuk ke saldo Anda.</li>
+                        <li><b>Tambah / Isi Saldo</b>: <i>&quot;Tambah saldo BCA 500rb&quot;</i> atau <i>&quot;Top up DANA 100rb&quot;</i>.</li>
+                        <li><b>Kurangi / Tarik Saldo</b>: <i>&quot;Kurangi saldo GoPay 50rb&quot;</i> atau <i>&quot;Tarik tunai BCA 200rb&quot;</i>.</li>
+                        <li><b>Catat Pengeluaran</b>: <i>&quot;Beli bensin 50rb pakai Mandiri&quot;</i>.</li>
+                        <li><b>Scan Struk</b>: Kirim foto struk belanjaan untuk diekstrak otomatis.</li>
                       </ul>
                     )}
                   </div>
@@ -255,12 +263,23 @@ export default function AIChatPage() {
                   </div>
                 )}
 
-                {/* Kartu Konfirmasi Transaksi AI */}
+                {/* Kartu Konfirmasi Transaksi / Mutasi AI */}
                 {msg.parsedTx && (
                   <TransactionConfirmCard
                     initialData={msg.parsedTx}
                     accounts={accounts}
                     categories={categories}
+                    onSaved={() => {
+                      loadMetadata();
+                      setMessages((prev) => [
+                        ...prev,
+                        {
+                          id: Date.now().toString(),
+                          sender: "assistant",
+                          text: "✅ Saldo akun dan riwayat kas Anda telah berhasil diperbarui!",
+                        },
+                      ]);
+                    }}
                   />
                 )}
               </div>
@@ -276,7 +295,7 @@ export default function AIChatPage() {
             </div>
             <div className="p-3.5 rounded-2xl neu-flat border border-white/80 flex items-center gap-2.5 text-xs text-emerald-700 font-bold">
               <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
-              <span>AI sedang menganalisis transaksi...</span>
+              <span>AI sedang menganalisis perintah mutasi saldo...</span>
             </div>
           </div>
         )}
@@ -287,22 +306,34 @@ export default function AIChatPage() {
       {/* Suggestion Chips */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
         <button
-          onClick={() => handleSendText("Beli bensin 50rb pakai DANA")}
-          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
+          onClick={() => handleSendText("Tambah saldo BCA 500rb")}
+          className="neu-btn px-3 py-1.5 rounded-xl text-emerald-700 hover:text-emerald-900 font-bold transition-all whitespace-nowrap bg-emerald-500/10 border border-emerald-500/20"
         >
-          ⛽ Beli bensin 50rb pakai DANA
+          📈 Tambah saldo BCA 500rb
         </button>
         <button
-          onClick={() => handleSendText("Ngopi 38rb pakai GoPay")}
-          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
+          onClick={() => handleSendText("Top up DANA 100rb")}
+          className="neu-btn px-3 py-1.5 rounded-xl text-sky-700 hover:text-sky-900 font-bold transition-all whitespace-nowrap bg-sky-500/10 border border-sky-500/20"
         >
-          ☕ Ngopi 38rb pakai GoPay
+          💳 Top up DANA 100rb
         </button>
         <button
-          onClick={() => handleSendText("Belanja bulanan 250rb BCA")}
-          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
+          onClick={() => handleSendText("Kurangi saldo GoPay 50rb")}
+          className="neu-btn px-3 py-1.5 rounded-xl text-rose-700 hover:text-rose-900 font-bold transition-all whitespace-nowrap bg-rose-500/10 border border-rose-500/20"
         >
-          🛒 Belanja bulanan 250rb BCA
+          📉 Kurangi saldo GoPay 50rb
+        </button>
+        <button
+          onClick={() => handleSendText("Tarik tunai BCA 200rb")}
+          className="neu-btn px-3 py-1.5 rounded-xl text-amber-700 hover:text-amber-900 font-bold transition-all whitespace-nowrap bg-amber-500/10 border border-amber-500/20"
+        >
+          💵 Tarik tunai BCA 200rb
+        </button>
+        <button
+          onClick={() => handleSendText("Beli bensin 50rb pakai Mandiri")}
+          className="neu-btn px-3 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
+        >
+          ⛽ Beli bensin 50rb Mandiri
         </button>
       </div>
 
@@ -349,7 +380,7 @@ export default function AIChatPage() {
           {/* Input Chat */}
           <input
             type="text"
-            placeholder="Ketik pengeluaran (misal: 'Beli bensin 50rb DANA')..."
+            placeholder="Ketik perintah (misal: 'Tambah saldo BCA 500rb' atau 'Kurangi saldo GoPay 50rb')..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => {
