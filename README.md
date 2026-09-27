@@ -1,10 +1,6 @@
 # 💎 FinanceFlow — Smart Personal Finance & Cashflow
 
 <p align="center">
-  <img src="public/icons/icon-512x512.png" alt="FinanceFlow Logo" width="120" style="border-radius: 28px; box-shadow: 8px 8px 16px #cdd5e0, -8px -8px 16px #ffffff;" />
-</p>
-
-<p align="center">
   <b>Aplikasi Manajemen Keuangan & Arus Kas Pribadi Berbasis AI dengan Desain Neumorphism (Soft UI) Light Theme.</b>
 </p>
 
