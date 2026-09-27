@@ -178,20 +178,20 @@ export default function AIChatPage() {
   return (
     <div className="h-[calc(100vh-8rem)] md:h-[calc(100vh-5rem)] flex flex-col justify-between space-y-4">
       {/* Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shadow-md">
-            <Sparkles className="w-4 h-4" />
+      <div className="flex items-center justify-between pb-3 border-b border-slate-300/60 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl neu-flat flex items-center justify-center text-emerald-600 shadow-sm">
+            <Sparkles className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+            <h3 className="text-sm font-black text-slate-800 flex items-center gap-2">
               <span>AI Financial Copilot</span>
-              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full neu-pressed-sm text-emerald-700">
                 Vision AI
               </span>
             </h3>
-            <p className="text-[11px] text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <p className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1.5 mt-0.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Siap membaca foto struk belanjaan & mencatat pengeluaran
             </p>
           </div>
@@ -209,10 +209,10 @@ export default function AIChatPage() {
               className={`flex items-start gap-3 ${isAssistant ? "" : "flex-row-reverse"}`}
             >
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-xs font-bold ${
+                className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 text-xs font-bold ${
                   isAssistant
-                    ? "bg-slate-800 border border-slate-700 text-emerald-400"
-                    : "bg-emerald-500/20 border border-emerald-500/30 text-emerald-400"
+                    ? "neu-flat text-emerald-600"
+                    : "neu-pressed text-emerald-700"
                 }`}
               >
                 {isAssistant ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
@@ -226,15 +226,15 @@ export default function AIChatPage() {
                 {/* Bubble Text */}
                 {msg.text && (
                   <div
-                    className={`p-3.5 rounded-2xl text-xs md:text-sm leading-relaxed ${
+                    className={`p-4 rounded-3xl text-xs md:text-sm leading-relaxed ${
                       isAssistant
-                        ? "bg-slate-900 border border-slate-800 text-slate-200"
-                        : "bg-emerald-500 text-slate-950 font-medium ml-auto"
+                        ? "neu-flat text-slate-800 border border-white/80"
+                        : "neu-pressed text-emerald-950 bg-emerald-500/10 border border-emerald-500/20 font-semibold ml-auto"
                     }`}
                   >
                     <p>{msg.text}</p>
                     {msg.id === "welcome" && (
-                      <ul className="text-xs text-slate-400 space-y-1 list-disc list-inside mt-2">
+                      <ul className="text-xs text-slate-600 font-medium space-y-1.5 list-disc list-inside mt-2.5">
                         <li>Kirim foto struk belanjaan untuk dicatat otomatis.</li>
                         <li>Ketik teks cepat, misal: <i>&quot;Beli bensin 50rb pakai DANA&quot;</i>.</li>
                         <li>Konfirmasi data sebelum transaksi masuk ke saldo Anda.</li>
@@ -245,12 +245,12 @@ export default function AIChatPage() {
 
                 {/* Foto Struk Preview jika ada */}
                 {msg.imagePreview && (
-                  <div className="rounded-2xl overflow-hidden border border-slate-800 max-w-[200px] ml-auto">
+                  <div className="rounded-2xl overflow-hidden neu-flat p-1 border border-white/80 max-w-[200px] ml-auto">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={msg.imagePreview}
                       alt="Struk Belanja"
-                      className="w-full h-auto object-cover max-h-48"
+                      className="w-full h-auto object-cover rounded-xl max-h-48"
                     />
                   </div>
                 )}
@@ -271,11 +271,11 @@ export default function AIChatPage() {
         {/* Loading Bubble saat AI menganalisis */}
         {analyzing && (
           <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center shrink-0 text-emerald-400">
+            <div className="w-9 h-9 rounded-2xl neu-flat flex items-center justify-center shrink-0 text-emerald-600">
               <Bot className="w-4 h-4 animate-spin" />
             </div>
-            <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center gap-2 text-xs text-emerald-400">
-              <Loader2 className="w-4 h-4 animate-spin" />
+            <div className="p-3.5 rounded-2xl neu-flat border border-white/80 flex items-center gap-2.5 text-xs text-emerald-700 font-bold">
+              <Loader2 className="w-4 h-4 animate-spin text-emerald-600" />
               <span>AI sedang menganalisis transaksi...</span>
             </div>
           </div>
@@ -285,22 +285,22 @@ export default function AIChatPage() {
       </div>
 
       {/* Suggestion Chips */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
         <button
           onClick={() => handleSendText("Beli bensin 50rb pakai DANA")}
-          className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-all whitespace-nowrap"
+          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
         >
           ⛽ Beli bensin 50rb pakai DANA
         </button>
         <button
           onClick={() => handleSendText("Ngopi 38rb pakai GoPay")}
-          className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-all whitespace-nowrap"
+          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
         >
           ☕ Ngopi 38rb pakai GoPay
         </button>
         <button
           onClick={() => handleSendText("Belanja bulanan 250rb BCA")}
-          className="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white transition-all whitespace-nowrap"
+          className="neu-btn px-3.5 py-1.5 rounded-xl text-slate-600 hover:text-slate-900 font-semibold transition-all whitespace-nowrap"
         >
           🛒 Belanja bulanan 250rb BCA
         </button>
@@ -325,13 +325,13 @@ export default function AIChatPage() {
           className="hidden"
         />
 
-        <div className="p-2 rounded-2xl bg-slate-900 border border-slate-800 flex items-center gap-2 shadow-xl">
+        <div className="p-2 rounded-2xl neu-flat border border-white/80 flex items-center gap-2">
           {/* Tombol Kamera HP */}
           <button
             type="button"
             title="Ambil Foto dari Kamera"
             onClick={() => cameraInputRef.current?.click()}
-            className="p-2 text-slate-400 hover:text-emerald-400 rounded-xl hover:bg-slate-800 transition-all"
+            className="p-2 neu-btn text-slate-500 hover:text-emerald-600 rounded-xl transition-all"
           >
             <Camera className="w-5 h-5" />
           </button>
@@ -341,7 +341,7 @@ export default function AIChatPage() {
             type="button"
             title="Upload Foto Struk Belanja"
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 text-slate-400 hover:text-emerald-400 rounded-xl hover:bg-slate-800 transition-all"
+            className="p-2 neu-btn text-slate-500 hover:text-emerald-600 rounded-xl transition-all"
           >
             <ImagePlus className="w-5 h-5" />
           </button>
@@ -355,7 +355,7 @@ export default function AIChatPage() {
             onKeyDown={(e) => {
               if (e.key === "Enter") handleSendText();
             }}
-            className="flex-1 bg-transparent text-xs md:text-sm text-white focus:outline-none placeholder:text-slate-500"
+            className="flex-1 bg-transparent text-xs md:text-sm text-slate-800 focus:outline-none placeholder:text-slate-400 font-semibold px-2"
           />
 
           {/* Tombol Kirim */}
@@ -363,7 +363,7 @@ export default function AIChatPage() {
             type="button"
             onClick={() => handleSendText()}
             disabled={!inputText.trim() || analyzing}
-            className="p-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 rounded-xl transition-all font-semibold disabled:opacity-50"
+            className="p-2.5 neu-btn-primary text-white rounded-xl transition-all font-bold disabled:opacity-50 shadow-md"
           >
             <Send className="w-4 h-4" />
           </button>

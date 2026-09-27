@@ -18,7 +18,7 @@ export default function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 px-2 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom))]">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#eef2f6]/95 backdrop-blur-xl border-t border-white/80 shadow-[0_-6px_20px_rgba(205,213,224,0.7)] px-2 pt-2 pb-[calc(0.6rem+env(safe-area-inset-bottom))]">
             <div className="flex items-center justify-around">
                 {navItems.map((item) => {
                     const Icon = item.icon;
@@ -29,27 +29,27 @@ export default function BottomNav() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex flex-col items-center gap-1 transition-all duration-200 py-1 px-3 rounded-xl",
+                                "flex flex-col items-center gap-1 transition-all duration-200 py-1 px-2.5 rounded-2xl",
                                 item.highlight
-                                    ? "text-emerald-400 font-semibold"
+                                    ? "text-emerald-700 font-bold"
                                     : isActive
-                                        ? "text-white font-medium"
-                                        : "text-slate-400 hover:text-slate-200"
+                                        ? "text-emerald-700 font-bold"
+                                        : "text-slate-500 hover:text-slate-800"
                             )}
                         >
                             <div
                                 className={cn(
-                                    "p-1.5 rounded-xl transition-all",
+                                    "p-2 rounded-xl transition-all",
                                     item.highlight
-                                        ? "bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30"
+                                        ? "neu-btn-primary shadow-sm"
                                         : isActive
-                                            ? "bg-slate-800 text-white"
-                                            : ""
+                                            ? "neu-pressed text-emerald-700"
+                                            : "neu-btn border-transparent bg-transparent"
                                 )}
                             >
-                                <Icon className="w-5 h-5" />
+                                <Icon className="w-4 h-4" />
                             </div>
-                            <span className="text-[11px] tracking-tight">{item.label}</span>
+                            <span className="text-[10px] tracking-tight font-medium">{item.label}</span>
                         </Link>
                     );
                 })}

@@ -4,28 +4,171 @@
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 210 40% 98%;
+    --neu-bg: #eef2f6;
+    --neu-surface: #eef2f6;
+    --neu-shadow-dark: #cdd5e0;
+    --neu-shadow-light: #ffffff;
+    --neu-accent: #059669;
+    --foreground: 222 47% 11%;
+    --background: 216 28% 95%;
   }
 
-  .dark {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --card: 222 47% 8%;
-    --card-foreground: 213 31% 91%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 224 71% 4%;
+  body {
+    background-color: var(--neu-bg);
+    color: #1e293b;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
-body {
-  color: hsl(var(--foreground));
-  background: hsl(var(--background));
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+/* === NEUMORPHISM (SOFT UI) DESIGN UTILITIES === */
+@layer utilities {
+  /* Raised Card / Surface */
+  .neu-flat {
+    background: #eef2f6;
+    box-shadow: 8px 8px 16px #cdd5e0, -8px -8px 16px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+  }
+
+  /* Compact Raised Surface */
+  .neu-flat-sm {
+    background: #eef2f6;
+    box-shadow: 4px 4px 10px #d3dbe6, -4px -4px 10px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+  }
+
+  /* Subtly Raised Interactive Tile */
+  .neu-card {
+    background: #eef2f6;
+    box-shadow: 6px 6px 14px #cdd5e0, -6px -6px 14px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .neu-card:hover {
+    box-shadow: 8px 8px 18px #c5cde0, -8px -8px 18px #ffffff;
+    transform: translateY(-1px);
+  }
+
+  /* Sunken / Recessed Well (Input, Inset container, Active tab) */
+  .neu-pressed {
+    background: #eef2f6;
+    box-shadow: inset 4px 4px 8px #cdd5e0, inset -4px -4px 8px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  .neu-pressed-sm {
+    background: #eef2f6;
+    box-shadow: inset 2px 2px 5px #d3dbe6, inset -2px -2px 5px #ffffff;
+  }
+
+  /* Neumorphic Input Field */
+  .neu-input {
+    background: #eef2f6;
+    box-shadow: inset 3px 3px 6px #cdd5e0, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: #0f172a;
+    transition: all 0.2s ease;
+  }
+
+  .neu-input:focus {
+    box-shadow: inset 4px 4px 8px #c4cde0, inset -4px -4px 8px #ffffff, 0 0 0 2px rgba(16, 185, 129, 0.35);
+    outline: none;
+  }
+
+  /* Tactile Neumorphic Button */
+  .neu-btn {
+    background: #eef2f6;
+    box-shadow: 5px 5px 12px #cdd5e0, -5px -5px 12px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    color: #334155;
+    transition: all 0.15s ease-in-out;
+  }
+
+  .neu-btn:hover {
+    box-shadow: 6px 6px 14px #c2cbda, -6px -6px 14px #ffffff;
+    color: #0f172a;
+  }
+
+  .neu-btn:active {
+    box-shadow: inset 3px 3px 6px #cdd5e0, inset -3px -3px 6px #ffffff;
+    transform: scale(0.98);
+  }
+
+  /* Primary Accent Neumorphic Button (Emerald) */
+  .neu-btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 5px 5px 14px rgba(5, 150, 105, 0.35), -4px -4px 10px #ffffff;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.15s ease-in-out;
+  }
+
+  .neu-btn-primary:hover {
+    box-shadow: 6px 6px 18px rgba(5, 150, 105, 0.45), -5px -5px 12px #ffffff;
+    filter: brightness(1.05);
+  }
+
+  .neu-btn-primary:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
+  }
+
+  /* Danger Accent Neumorphic Button (Rose) */
+  .neu-btn-danger {
+    background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+    box-shadow: 5px 5px 14px rgba(225, 29, 72, 0.3), -4px -4px 10px #ffffff;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.15s ease-in-out;
+  }
+
+  .neu-btn-danger:hover {
+    box-shadow: 6px 6px 18px rgba(225, 29, 72, 0.4), -5px -5px 12px #ffffff;
+    filter: brightness(1.05);
+  }
+
+  .neu-btn-danger:active {
+    box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.25), inset -3px -3px 6px rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
+  }
+
+  /* Circular extruded element */
+  .neu-circle {
+    border-radius: 9999px;
+    box-shadow: 4px 4px 10px #cdd5e0, -4px -4px 10px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  /* Circular recessed icon well */
+  .neu-circle-recessed {
+    border-radius: 9999px;
+    box-shadow: inset 3px 3px 6px #cdd5e0, inset -3px -3px 6px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+  }
+
+  /* Neumorphic Convex Pill */
+  .neu-pill {
+    background: linear-gradient(145deg, #f5f9fe, #e5ebf4);
+    box-shadow: 4px 4px 10px #cdd5e0, -4px -4px 10px #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+  }
+
+  /* Soft Neumorphic Glows */
+  .neu-glow-emerald {
+    box-shadow: 6px 6px 16px rgba(16, 185, 129, 0.18), -6px -6px 16px #ffffff;
+  }
+
+  .neu-glow-rose {
+    box-shadow: 6px 6px 16px rgba(244, 63, 94, 0.18), -6px -6px 16px #ffffff;
+  }
+
+  .neu-glow-amber {
+    box-shadow: 6px 6px 16px rgba(245, 158, 11, 0.18), -6px -6px 16px #ffffff;
+  }
+
+  .neu-glow-sky {
+    box-shadow: 6px 6px 16px rgba(14, 165, 233, 0.18), -6px -6px 16px #ffffff;
+  }
 }

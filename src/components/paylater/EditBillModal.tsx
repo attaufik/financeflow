@@ -57,27 +57,27 @@ export default function EditBillModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl space-y-5">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+      <div className="w-full max-w-md bg-[#eef2f6] neu-card rounded-3xl p-6 shadow-2xl space-y-5 border border-white/80">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
-              <CreditCard className="w-5 h-5" />
+        <div className="flex items-center justify-between border-b border-slate-300/60 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl neu-pressed flex items-center justify-center text-rose-600">
+              <CreditCard className="w-5 h-5 text-rose-600" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-white">Atur Tagihan & Limit {bill.name}</h3>
-              <p className="text-xs text-slate-400">Sesuaikan tagihan aktif dan tanggal jatuh tempo</p>
+              <h3 className="text-base font-extrabold text-slate-800">Atur Tagihan & Limit {bill.name}</h3>
+              <p className="text-xs text-slate-500 font-medium">Sesuaikan tagihan aktif dan tanggal jatuh tempo</p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
+          <button onClick={onClose} className="neu-btn p-1.5 rounded-xl text-slate-500 hover:text-slate-800 transition-all">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Nominal Tagihan Aktif Bulan Ini (Rp)
             </label>
             <input
@@ -86,15 +86,15 @@ export default function EditBillModal({
               placeholder="0 jika sudah lunas"
               value={activeBill}
               onChange={(e) => setActiveBill(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-base font-bold text-white focus:outline-none focus:border-rose-500"
+              className="w-full neu-input rounded-2xl px-4 py-2.5 text-base font-black text-slate-800 focus:outline-none"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-slate-500 font-medium mt-1">
               Isi 0 jika tagihan bulan ini sudah tidak ada / lunas.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Total Limit Kredit SPayLater (Rp)
             </label>
             <input
@@ -103,12 +103,12 @@ export default function EditBillModal({
               placeholder="Contoh: 5000000"
               value={creditLimit}
               onChange={(e) => setCreditLimit(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-rose-500"
+              className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
               Tanggal Jatuh Tempo Setiap Bulan
             </label>
             <input
@@ -119,25 +119,25 @@ export default function EditBillModal({
               placeholder="Contoh: 25"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-rose-500"
+              className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm font-semibold text-slate-800 focus:outline-none"
             />
-            <p className="text-[11px] text-slate-500 mt-1">
+            <p className="text-[11px] text-slate-500 font-medium mt-1">
               SPayLater biasanya jatuh tempo tanggal 5, 15, atau 25 setiap bulannya.
             </p>
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-300/60">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition-all"
+              className="px-4 py-2.5 neu-btn rounded-2xl text-xs font-bold text-slate-600 hover:text-slate-900 transition-all"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition-all shadow-lg shadow-rose-600/20 disabled:opacity-50"
+              className="flex items-center gap-1.5 neu-btn-danger font-bold px-5 py-2.5 rounded-2xl text-xs text-white transition-all shadow-md disabled:opacity-50"
             >
               {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               <span>{submitting ? "Menyimpan..." : "Simpan Pengaturan"}</span>

@@ -23,18 +23,20 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   // 1. JIKA DI HALAMAN LOGIN: Langsung render tanpa guard atau loading!
   if (isLoginPage) {
-    return <main className="min-h-screen bg-slate-950">{children}</main>;
+    return <main className="min-h-screen bg-[#eef2f6] text-slate-800">{children}</main>;
   }
 
   // 2. Loading screen HANYA saat memeriksa sesi untuk halaman privat
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-3 p-4 text-center">
-        <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
-        <p className="text-xs text-slate-400">Memeriksa sesi keamanan...</p>
+      <div className="min-h-screen bg-[#eef2f6] flex flex-col items-center justify-center space-y-3 p-4 text-center">
+        <div className="p-4 rounded-2xl neu-flat flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+        </div>
+        <p className="text-xs text-slate-600 font-medium">Memeriksa sesi keamanan...</p>
         <a
           href="/login"
-          className="text-xs text-emerald-400 hover:text-emerald-300 underline pt-2 font-medium"
+          className="text-xs text-emerald-600 hover:text-emerald-700 underline pt-1 font-semibold"
         >
           Masuk ke Halaman Login &rarr;
         </a>
@@ -45,12 +47,14 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   // 3. Jika belum login dan bukan di halaman login
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-3 p-4 text-center">
-        <Loader2 className="w-8 h-8 text-emerald-400 animate-spin" />
-        <p className="text-xs text-slate-400">Mengarahkan ke halaman login...</p>
+      <div className="min-h-screen bg-[#eef2f6] flex flex-col items-center justify-center space-y-3 p-4 text-center">
+        <div className="p-4 rounded-2xl neu-flat flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+        </div>
+        <p className="text-xs text-slate-600 font-medium">Mengarahkan ke halaman login...</p>
         <a
           href="/login"
-          className="text-xs font-semibold bg-emerald-500 hover:bg-emerald-600 text-slate-950 px-4 py-2 rounded-xl mt-2 transition-all"
+          className="text-xs font-bold neu-btn-primary px-5 py-2.5 rounded-xl mt-2 inline-flex items-center"
         >
           Buka Halaman Login
         </a>

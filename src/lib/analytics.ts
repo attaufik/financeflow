@@ -25,6 +25,123 @@ export interface CategoryExpenseBreakdown {
   transactionCount: number;
 }
 
+export interface PeriodicExpenses {
+  today: number;
+  thisWeek: number;
+  thisMonth: number;
+  todayCount: number;
+  weekCount: number;
+  monthCount: number;
+  dailyAverage: number;
+  todayIncome: number;
+  weekIncome: number;
+  monthIncome: number;
+}
+
+export type ExpensePeriod = "today" | "week" | "month" | "all";
+
+/**
+ * Parsing tanggal transaksi dengan aman menghindari offset UTC
+ */
+export function parseTxDate(dateStr: string): Date {
+  if (!dateStr) return new Date();
+  const clean = dateStr.split("T")[0];
+  const parts = clean.split("-");
+  if (parts.length === 3) {
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    return new Date(y, m, d, 12, 0, 0);
+  }
+  return new Date(dateStr);
+}
+
+export function isSameDay(d1: Date, d2: Date): boolean {
+  return (
+    d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate()
+  );
+}
+
+export function isSameWeek(targetDate: Date, refDate: Date): boolean {
+  const d = new Date(refDate.getFullYear(), refDate.getMonth(), refDate.getDate());
+  const day = d.getDay();
+  const diffToMonday = (day + 6) % 7;
+  const startOfWeek = new Date(d.getFullYear(), d.getMonth(), d.getDate() - diffToMonday, 0, 0, 0, 0);
+  const endOfWeek = new Date(startOfWeek.getTime() + 7 * 24 * 60 * 60 * 1000 - 1);
+
+  const tTime = targetDate.getTime();
+  return tTime >= startOfWeek.getTime() && tTime <= endOfWeek.getTime();
+}
+
+export function isSameMonth(d1: Date, d2: Date): boolean {
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth();
+}
+
+/**
+ * Menghitung pengeluaran per periode (Hari Ini, Minggu Ini, Bulan Ini)
+ */
+export function calculatePeriodicExpenses(
+  transactions: DbTransaction[],
+  referenceDate = new Date()
+): PeriodicExpenses {
+  let today = 0;
+  let thisWeek = 0;
+  let thisMonth = 0;
+  let todayCount = 0;
+  let weekCount = 0;
+  let monthCount = 0;
+
+  let todayIncome = 0;
+  let weekIncome = 0;
+  let monthIncome = 0;
+
+  transactions.forEach((t) => {
+    const txDate = parseTxDate(t.transaction_date);
+    const amt = Number(t.amount) || 0;
+
+    const matchDay = isSameDay(txDate, referenceDate);
+    const matchWeek = isSameWeek(txDate, referenceDate);
+    const matchMonth = isSameMonth(txDate, referenceDate);
+
+    if (t.type === "expense") {
+      if (matchDay) {
+        today += amt;
+        todayCount += 1;
+      }
+      if (matchWeek) {
+        thisWeek += amt;
+        weekCount += 1;
+      }
+      if (matchMonth) {
+        thisMonth += amt;
+        monthCount += 1;
+      }
+    } else if (t.type === "income") {
+      if (matchDay) todayIncome += amt;
+      if (matchWeek) weekIncome += amt;
+      if (matchMonth) monthIncome += amt;
+    }
+  });
+
+  const daysPassed = Math.max(1, referenceDate.getDate());
+  const dailyAverage = Math.round(thisMonth / daysPassed);
+
+  return {
+    today,
+    thisWeek,
+    thisMonth,
+    todayCount,
+    weekCount,
+    monthCount,
+    dailyAverage,
+    todayIncome,
+    weekIncome,
+    monthIncome,
+  };
+}
+
 /**
  * Menghitung metrik finansial bulanan secara real-time
  */
@@ -45,7 +162,7 @@ export function calculateMonthlyStats(
   const currentMonth = referenceDate.getMonth(); // 0-indexed
 
   const currentMonthTxs = transactions.filter((t) => {
-    const txDate = new Date(t.transaction_date);
+    const txDate = parseTxDate(t.transaction_date);
     return (
       txDate.getFullYear() === currentYear && txDate.getMonth() === currentMonth
     );
@@ -82,7 +199,6 @@ export function calculateMonthlyStats(
   }, 0);
 
   // 5. Proyeksi Saldo Akhir Bulan
-  // Proyeksi = Saldo Likuid - (Burn Rate * Sisa Hari) - Tagihan PayLater
   const projectedExpenditure = dailyBurnRate * daysRemaining + activePaylaterBill;
   const projectedMonthEndBalance = totalLiquidBalance - projectedExpenditure;
 
@@ -94,11 +210,6 @@ export function calculateMonthlyStats(
   }
 
   // 6. Skor Kesehatan Finansial (0 - 100)
-  // Bobot:
-  // - Likuiditas positif vs pengeluaran (35 poin)
-  // - Rasio tabungan/cashflow positif (25 poin)
-  // - Beban paylater vs saldo (20 poin)
-  // - Burn rate terkendali (20 poin)
   let healthScore = 50;
 
   if (totalLiquidBalance > totalExpenseThisMonth * 2) healthScore += 25;
@@ -139,24 +250,30 @@ export function calculateMonthlyStats(
 }
 
 /**
- * Menghitung rincian pengeluaran per kategori bulan ini
+ * Menghitung rincian pengeluaran per kategori berdasarkan periode yang dipilih
  */
 export function calculateCategoryBreakdown(
   transactions: DbTransaction[],
+  period: ExpensePeriod = "month",
   referenceDate = new Date()
 ): CategoryExpenseBreakdown[] {
-  const currentYear = referenceDate.getFullYear();
-  const currentMonth = referenceDate.getMonth();
-
-  const currentMonthExpenses = transactions.filter((t) => {
+  const filteredExpenses = transactions.filter((t) => {
     if (t.type !== "expense") return false;
-    const txDate = new Date(t.transaction_date);
-    return (
-      txDate.getFullYear() === currentYear && txDate.getMonth() === currentMonth
-    );
+    const txDate = parseTxDate(t.transaction_date);
+
+    if (period === "today") {
+      return isSameDay(txDate, referenceDate);
+    }
+    if (period === "week") {
+      return isSameWeek(txDate, referenceDate);
+    }
+    if (period === "month") {
+      return isSameMonth(txDate, referenceDate);
+    }
+    return true; // "all"
   });
 
-  const totalExpense = currentMonthExpenses.reduce(
+  const totalExpense = filteredExpenses.reduce(
     (sum, t) => sum + (Number(t.amount) || 0),
     0
   );
@@ -166,7 +283,7 @@ export function calculateCategoryBreakdown(
     { categoryName: string; totalAmount: number; count: number }
   >();
 
-  currentMonthExpenses.forEach((t) => {
+  filteredExpenses.forEach((t) => {
     const catId = t.category_id || "uncategorized";
     const catName = t.categories?.name || "Lain-lain";
     const amt = Number(t.amount) || 0;

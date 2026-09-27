@@ -251,25 +251,25 @@ export default function WalletsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white">Dompet & Rekening</h2>
-          <p className="text-xs md:text-sm text-slate-400">
+          <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">Dompet & Rekening</h2>
+          <p className="text-xs md:text-sm text-slate-500 font-medium">
             Kelola rekening bank, e-wallet, dan paylater Anda secara realtime
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => fetchWallets()}
             disabled={loading}
             title="Refresh Data"
-            className="p-2 bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-800 rounded-xl text-xs transition-all disabled:opacity-50"
+            className="p-2.5 neu-btn rounded-2xl text-slate-600 hover:text-slate-900 transition-all disabled:opacity-50"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-emerald-400" : ""}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin text-emerald-600" : ""}`} />
           </button>
 
           <button
             onClick={openCreateModal}
-            className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
+            className="flex items-center gap-2 neu-btn-primary px-4 py-2.5 rounded-2xl text-xs md:text-sm font-bold shadow-md"
           >
             <Plus className="w-4 h-4" />
             <span>Tambah Akun</span>
@@ -279,19 +279,19 @@ export default function WalletsPage() {
 
       {/* Error Alert */}
       {error && (
-        <div className="p-4 rounded-2xl bg-rose-950/40 border border-rose-800/60 flex items-start justify-between gap-3">
+        <div className="p-4 rounded-3xl neu-flat border-l-4 border-l-rose-500 flex items-start justify-between gap-3 bg-[#eef2f6]">
           <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
             <div>
-              <h4 className="text-xs md:text-sm font-semibold text-rose-300">
+              <h4 className="text-xs md:text-sm font-bold text-rose-800">
                 Terjadi Kesalahan
               </h4>
-              <p className="text-xs text-rose-200/80 mt-0.5">{error}</p>
+              <p className="text-xs text-rose-600 mt-0.5">{error}</p>
             </div>
           </div>
           <button
             onClick={() => fetchWallets()}
-            className="px-3 py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-lg text-xs font-medium border border-rose-500/30 transition-all shrink-0"
+            className="px-3 py-1.5 neu-btn rounded-xl text-xs font-bold text-rose-700 shrink-0"
           >
             Coba Lagi
           </button>
@@ -300,49 +300,37 @@ export default function WalletsPage() {
 
       {/* Loading Skeleton */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 space-y-4 animate-pulse"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-800" />
-                <div className="space-y-2">
-                  <div className="w-24 h-4 bg-slate-800 rounded" />
-                  <div className="w-32 h-3 bg-slate-800 rounded" />
-                </div>
-              </div>
-              <div className="pt-2 border-t border-slate-800 flex justify-between">
-                <div className="w-28 h-6 bg-slate-800 rounded" />
-                <div className="w-16 h-5 bg-slate-800 rounded" />
-              </div>
-            </div>
+              className="p-6 rounded-3xl neu-pressed space-y-4 animate-pulse h-40"
+            />
           ))}
         </div>
       ) : accounts.length === 0 && !paylater ? (
-        <div className="p-10 rounded-2xl bg-slate-900/30 border border-dashed border-slate-800 text-center space-y-4">
-          <div className="w-12 h-12 rounded-2xl bg-slate-800/80 flex items-center justify-center text-slate-400 mx-auto">
-            <Wallet className="w-6 h-6" />
+        <div className="p-10 rounded-3xl neu-flat text-center space-y-4">
+          <div className="w-14 h-14 rounded-3xl neu-pressed flex items-center justify-center text-slate-400 mx-auto">
+            <Wallet className="w-7 h-7" />
           </div>
           <div className="space-y-1">
-            <h3 className="text-base font-bold text-white">Belum Ada Akun Terdaftar</h3>
-            <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-              Anda belum memiliki dompet atau rekening di database Supabase. Anda dapat menambahkan akun sendiri atau mengisi akun default (BCA, SeaBank, DANA, GoPay, SPayLater).
+            <h3 className="text-base font-bold text-slate-900">Belum Ada Akun Terdaftar</h3>
+            <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+              Anda belum memiliki dompet atau rekening di database Supabase. Anda dapat menambahkan akun sendiri atau mengisi akun default.
             </p>
           </div>
           <div className="flex items-center justify-center gap-3 pt-2">
             <button
               onClick={handleSeedDefaults}
               disabled={submitting}
-              className="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2 rounded-xl text-xs font-semibold transition-all disabled:opacity-50"
+              className="flex items-center gap-2 neu-btn px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-700 disabled:opacity-50"
             >
-              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <Sparkles className="w-4 h-4 text-emerald-600" />
               <span>{submitting ? "Memproses..." : "Isi Akun Default Otomatis"}</span>
             </button>
             <button
               onClick={openCreateModal}
-              className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 px-4 py-2 rounded-xl text-xs font-bold transition-all"
+              className="flex items-center gap-2 neu-btn-primary px-4 py-2.5 rounded-2xl text-xs font-bold"
             >
               <Plus className="w-4 h-4" />
               <span>Tambah Manual</span>
@@ -351,48 +339,45 @@ export default function WalletsPage() {
         </div>
       ) : (
         /* List Akun */
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Akun-akun Dompet Cair */}
           {accounts.map((acc) => {
-            const cardGradient = acc.color || "from-blue-600 to-blue-800";
             return (
               <div
                 key={acc.id}
-                className="group p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-slate-700 transition-all space-y-4 relative"
+                className="group p-6 rounded-3xl neu-flat hover:neu-card transition-all space-y-4 relative"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cardGradient} flex items-center justify-center text-white shadow-md`}
-                    >
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-2xl neu-pressed flex items-center justify-center text-slate-800">
                       {getWalletIcon(acc.type, acc.name)}
                     </div>
                     <div>
-                      <h4 className="font-bold text-base text-white">{acc.name}</h4>
-                      <p className="text-xs text-slate-500">
+                      <h4 className="font-bold text-base text-slate-900">{acc.name}</h4>
+                      <p className="text-xs text-slate-500 font-medium">
                         {acc.account_number || "Rekening / Dompet Digital"}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300">
+                    <span className="text-[10px] uppercase font-black px-2.5 py-1 rounded-full neu-pressed text-slate-600">
                       {acc.type}
                     </span>
 
                     {/* Tombol Aksi Edit & Hapus Akun */}
-                    <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                    <div className="flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => openEditModal(acc)}
                         title="Edit Akun"
-                        className="p-1.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-all"
+                        className="p-2 neu-btn rounded-xl text-slate-500 hover:text-emerald-700 transition-all"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setDeleteTargetAccount(acc)}
                         title="Hapus Akun"
-                        className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all"
+                        className="p-2 neu-btn rounded-xl text-slate-500 hover:text-rose-600 transition-all"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -400,15 +385,15 @@ export default function WalletsPage() {
                   </div>
                 </div>
 
-                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+                <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between">
                   <div>
-                    <span className="text-[11px] text-slate-400">Sisa Saldo</span>
-                    <p className="text-lg font-extrabold text-white">
+                    <span className="text-[11px] text-slate-500 font-medium">Sisa Saldo</span>
+                    <p className="text-xl font-black text-slate-900 mt-0.5">
                       {formatRupiah(Number(acc.balance || 0))}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg border border-emerald-500/20">
-                    <ShieldCheck className="w-3.5 h-3.5" /> Aktif
+                  <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 neu-pressed px-2.5 py-1 rounded-full">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> Aktif
                   </div>
                 </div>
               </div>
@@ -417,31 +402,31 @@ export default function WalletsPage() {
 
           {/* Akun Khusus SPayLater */}
           {paylater && (
-            <div className="p-5 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-rose-900/50 transition-all space-y-4">
+            <div className="p-6 rounded-3xl neu-flat hover:neu-card transition-all space-y-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-red-700 flex items-center justify-center text-white shadow-md">
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl neu-pressed flex items-center justify-center text-rose-600">
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-base text-white">{paylater.name}</h4>
-                    <p className="text-xs text-slate-500">Kewajiban / Cicilan PayLater</p>
+                    <h4 className="font-bold text-base text-slate-900">{paylater.name}</h4>
+                    <p className="text-xs text-slate-500 font-medium">Kewajiban / Cicilan PayLater</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <span
-                    className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
+                    className={`text-[10px] uppercase font-black px-2.5 py-1 rounded-full neu-pressed ${
                       paylater.active_bill > 0
-                        ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                        : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center gap-1"
+                        ? "text-rose-700"
+                        : "text-emerald-700 flex items-center gap-1"
                     }`}
                   >
                     {paylater.active_bill > 0 ? (
                       "paylater"
                     ) : (
                       <>
-                        <CheckCircle2 className="w-2.5 h-2.5" /> Lunas
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Lunas
                       </>
                     )}
                   </span>
@@ -449,38 +434,38 @@ export default function WalletsPage() {
                   <button
                     onClick={() => setIsEditBillModalOpen(true)}
                     title="Atur Tagihan & Limit"
-                    className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-all"
+                    className="p-2 neu-btn rounded-xl text-slate-500 hover:text-slate-900 transition-all"
                   >
                     <Settings2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between">
+              <div className="pt-3 border-t border-slate-200/80 flex items-center justify-between">
                 <div>
-                  <span className="text-[11px] text-slate-400">Total Tagihan Aktif</span>
+                  <span className="text-[11px] text-slate-500 font-medium">Total Tagihan Aktif</span>
                   <p
-                    className={`text-lg font-extrabold ${
-                      paylater.active_bill > 0 ? "text-rose-400" : "text-emerald-400"
+                    className={`text-xl font-black mt-0.5 ${
+                      paylater.active_bill > 0 ? "text-rose-600" : "text-emerald-600"
                     }`}
                   >
                     {paylater.active_bill > 0
                       ? formatRupiah(Number(paylater.active_bill || 0))
                       : "Rp 0 (Lunas)"}
                   </p>
-                  <p className="text-[10px] text-slate-500 mt-0.5">
+                  <p className="text-[10px] text-slate-500 mt-0.5 font-medium">
                     Limit: {formatRupiah(Number(paylater.credit_limit || 0))}
                   </p>
                 </div>
 
                 <div className="text-right space-y-1.5">
-                  <p className="text-xs font-semibold text-rose-300 flex items-center gap-1 justify-end">
+                  <p className="text-xs font-semibold text-rose-700 flex items-center gap-1 justify-end">
                     <Calendar className="w-3.5 h-3.5" /> Jatuh Tempo Tgl {paylater.due_date}
                   </p>
                   {Number(paylater.active_bill || 0) > 0 && (
                     <button
                       onClick={() => setIsPayModalOpen(true)}
-                      className="px-3 py-1 bg-rose-500 hover:bg-rose-600 text-slate-950 font-bold text-xs rounded-lg transition-all shadow-md shadow-rose-500/20"
+                      className="px-3.5 py-1.5 neu-btn-danger font-bold text-xs rounded-xl shadow-sm"
                     >
                       Bayar Sekarang
                     </button>
@@ -494,23 +479,23 @@ export default function WalletsPage() {
 
       {/* Modal Tambah / Edit Akun */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-base font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-md bg-[#eef2f6] neu-flat rounded-3xl p-6 md:p-8 space-y-5 border border-white/80">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/80">
+              <h3 className="text-base font-black text-slate-900">
                 {isEditing ? "Edit Akun Rekening" : "Tambah Akun Baru"}
               </h3>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1"
+                className="neu-btn p-1.5 rounded-xl text-slate-500 hover:text-slate-900"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <form onSubmit={handleSubmitAccount} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   Nama Akun / Bank
                 </label>
                 <input
@@ -519,18 +504,18 @@ export default function WalletsPage() {
                   placeholder="Contoh: BCA, SeaBank, DANA"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm text-slate-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   Tipe Akun
                 </label>
                 <select
                   value={type}
                   onChange={(e) => setType(e.target.value as DbAccountType)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm text-slate-900 font-medium"
                 >
                   <option value="bank">Bank</option>
                   <option value="ewallet">E-Wallet</option>
@@ -539,7 +524,7 @@ export default function WalletsPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   Nomor Rekening / No. HP (Opsional)
                 </label>
                 <input
@@ -547,12 +532,12 @@ export default function WalletsPage() {
                   placeholder="Contoh: 8830192831 atau 08123..."
                   value={accountNumber}
                   onChange={(e) => setAccountNumber(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm text-slate-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   {isEditing ? "Saldo Terkini (Rp)" : "Saldo Awal (Rp)"}
                 </label>
                 <input
@@ -560,18 +545,18 @@ export default function WalletsPage() {
                   placeholder="0"
                   value={balance}
                   onChange={(e) => setBalance(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm text-slate-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">
                   Warna Tema Kartu
                 </label>
                 <select
                   value={color}
                   onChange={(e) => setColor(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs md:text-sm text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full neu-input rounded-2xl px-4 py-2.5 text-xs md:text-sm text-slate-900 font-medium"
                 >
                   <option value="from-blue-600 to-blue-800">Biru (BCA / Mandiri)</option>
                   <option value="from-orange-500 to-amber-600">Oranye (SeaBank / Shopee)</option>
@@ -582,18 +567,18 @@ export default function WalletsPage() {
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-200/80">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition-all"
+                  className="px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-500 hover:text-slate-800 neu-btn"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs transition-all disabled:opacity-50"
+                  className="flex items-center gap-2 neu-btn-primary font-black px-5 py-2.5 rounded-2xl text-xs shadow-md disabled:opacity-50"
                 >
                   {submitting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>{submitting ? "Menyimpan..." : isEditing ? "Simpan Perubahan" : "Simpan Akun"}</span>
@@ -606,31 +591,31 @@ export default function WalletsPage() {
 
       {/* Modal Konfirmasi Hapus Akun */}
       {deleteTargetAccount && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-rose-400">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                <Trash2 className="w-5 h-5" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="w-full max-w-sm bg-[#eef2f6] neu-flat rounded-3xl p-6 space-y-4 border border-white/80">
+            <div className="flex items-center gap-3 text-rose-600">
+              <div className="w-10 h-10 rounded-2xl neu-pressed flex items-center justify-center">
+                <Trash2 className="w-5 h-5 text-rose-600" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-white">Hapus Akun Ini?</h4>
-                <p className="text-xs text-slate-400">Akun tidak akan muncul lagi di dasbor</p>
+                <h4 className="text-sm font-black text-slate-900">Hapus Akun Ini?</h4>
+                <p className="text-xs text-slate-500">Akun tidak akan muncul lagi di dasbor</p>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 text-xs space-y-1">
-              <p className="font-semibold text-white">{deleteTargetAccount.name}</p>
-              <p className="text-slate-400">
-                Saldo: <b className="text-white">{formatRupiah(Number(deleteTargetAccount.balance))}</b>
+            <div className="p-4 rounded-2xl neu-pressed text-xs space-y-1">
+              <p className="font-bold text-slate-900">{deleteTargetAccount.name}</p>
+              <p className="text-slate-500 font-medium">
+                Saldo: <b className="text-slate-900">{formatRupiah(Number(deleteTargetAccount.balance))}</b>
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-200/80">
               <button
                 type="button"
                 onClick={() => setDeleteTargetAccount(null)}
                 disabled={deleting}
-                className="px-4 py-2 rounded-xl text-xs font-medium text-slate-400 hover:text-white transition-all"
+                className="px-4 py-2.5 rounded-2xl text-xs font-bold text-slate-500 hover:text-slate-800 neu-btn"
               >
                 Batal
               </button>
@@ -638,7 +623,7 @@ export default function WalletsPage() {
                 type="button"
                 onClick={handleDeleteAccount}
                 disabled={deleting}
-                className="flex items-center gap-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all disabled:opacity-50"
+                className="flex items-center gap-2 neu-btn-danger font-black px-5 py-2.5 rounded-2xl text-xs shadow-md disabled:opacity-50"
               >
                 {deleting && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                 <span>{deleting ? "Menghapus..." : "Ya, Hapus"}</span>

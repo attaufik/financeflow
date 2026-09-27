@@ -12,7 +12,6 @@ import {
   ArrowRight,
   Loader2,
   Edit2,
-  Check,
   Calendar,
   Wallet,
   Tag,
@@ -121,16 +120,16 @@ export default function TransactionConfirmCard({
   const selectedCategoryObj = categories.find((c) => c.id === selectedCategoryId);
 
   return (
-    <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-800/40 shadow-xl space-y-3 max-w-sm">
+    <div className="p-4 rounded-3xl neu-flat border border-white/80 shadow-md space-y-3 max-w-sm">
       {/* Badge AI Header */}
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-          <Sparkles className="w-3 h-3" /> Deteksi AI Cerdas
+        <span className="flex items-center gap-1.5 text-[10px] font-black text-emerald-700 uppercase tracking-wider neu-pressed-sm px-2.5 py-1 rounded-full">
+          <Sparkles className="w-3 h-3 text-emerald-600" /> Deteksi AI Cerdas
         </span>
         {!isSaved && (
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className="text-xs text-slate-400 hover:text-white flex items-center gap-1"
+            className="neu-btn text-xs text-slate-600 hover:text-slate-900 px-2.5 py-1 rounded-xl flex items-center gap-1 font-semibold transition-all"
           >
             <Edit2 className="w-3 h-3" />
             <span>{isEditing ? "Tutup" : "Koreksi"}</span>
@@ -143,35 +142,35 @@ export default function TransactionConfirmCard({
         /* Edit Mode */
         <div className="space-y-2.5 pt-1 text-xs">
           <div>
-            <label className="text-[10px] text-slate-400 block mb-1">Nama Toko / Merchant</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">Nama Toko / Merchant</label>
             <input
               type="text"
               value={merchant}
               onChange={(e) => setMerchant(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white"
+              className="w-full neu-input rounded-xl px-3 py-2 text-slate-800 text-xs font-semibold focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="text-[10px] text-slate-400 block mb-1">Nominal (Rp)</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">Nominal (Rp)</label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white font-bold"
+              className="w-full neu-input rounded-xl px-3 py-2 text-slate-800 font-black text-sm focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2">
             <div>
-              <label className="text-[10px] text-slate-400 block mb-1">Sumber Dana</label>
+              <label className="text-[10px] font-bold text-slate-600 block mb-1">Sumber Dana</label>
               <select
                 value={selectedAccountId}
                 onChange={(e) => setSelectedAccountId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-white text-xs"
+                className="w-full neu-input rounded-xl px-2.5 py-2 text-slate-800 text-xs font-semibold focus:outline-none bg-[#eef2f6]"
               >
                 {accounts.map((a) => (
-                  <option key={a.id} value={a.id}>
+                  <option key={a.id} value={a.id} className="bg-white text-slate-800">
                     {a.name}
                   </option>
                 ))}
@@ -179,14 +178,14 @@ export default function TransactionConfirmCard({
             </div>
 
             <div>
-              <label className="text-[10px] text-slate-400 block mb-1">Kategori</label>
+              <label className="text-[10px] font-bold text-slate-600 block mb-1">Kategori</label>
               <select
                 value={selectedCategoryId}
                 onChange={(e) => setSelectedCategoryId(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-white text-xs"
+                className="w-full neu-input rounded-xl px-2.5 py-2 text-slate-800 text-xs font-semibold focus:outline-none bg-[#eef2f6]"
               >
                 {categories.map((c) => (
-                  <option key={c.id} value={c.id}>
+                  <option key={c.id} value={c.id} className="bg-white text-slate-800">
                     {c.name}
                   </option>
                 ))}
@@ -195,12 +194,12 @@ export default function TransactionConfirmCard({
           </div>
 
           <div>
-            <label className="text-[10px] text-slate-400 block mb-1">Deskripsi</label>
+            <label className="text-[10px] font-bold text-slate-600 block mb-1">Deskripsi</label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white"
+              className="w-full neu-input rounded-xl px-3 py-2 text-slate-800 text-xs font-semibold focus:outline-none"
             />
           </div>
         </div>
@@ -208,41 +207,41 @@ export default function TransactionConfirmCard({
         /* Preview Mode */
         <div className="space-y-2">
           <div>
-            <h4 className="text-sm font-bold text-white">{merchant}</h4>
-            <p className="text-xs text-slate-300">{description}</p>
+            <h4 className="text-sm font-black text-slate-800">{merchant}</h4>
+            <p className="text-xs text-slate-500 font-medium">{description}</p>
           </div>
 
-          <div className="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 space-y-1.5 text-xs">
+          <div className="p-3 rounded-2xl neu-pressed space-y-2 text-xs">
             <div className="flex justify-between items-center">
-              <span className="text-slate-400">Total Nominal</span>
-              <span className="font-extrabold text-sm text-emerald-400">
+              <span className="text-slate-500 font-medium">Total Nominal</span>
+              <span className="font-black text-sm text-emerald-600">
                 {formatRupiah(amount)}
               </span>
             </div>
 
             <div className="flex justify-between items-center text-[11px]">
-              <span className="text-slate-400 flex items-center gap-1">
-                <Wallet className="w-3 h-3 text-slate-500" /> Sumber Dana
+              <span className="text-slate-500 flex items-center gap-1 font-medium">
+                <Wallet className="w-3 h-3 text-slate-400" /> Sumber Dana
               </span>
-              <span className="font-semibold text-white">
+              <span className="font-bold text-slate-700">
                 {selectedAccountObj?.name || "BCA"}
               </span>
             </div>
 
             <div className="flex justify-between items-center text-[11px]">
-              <span className="text-slate-400 flex items-center gap-1">
-                <Tag className="w-3 h-3 text-slate-500" /> Kategori
+              <span className="text-slate-500 flex items-center gap-1 font-medium">
+                <Tag className="w-3 h-3 text-slate-400" /> Kategori
               </span>
-              <span className="text-slate-300">
+              <span className="font-bold text-slate-700">
                 {selectedCategoryObj?.name || "Belanja & Kebutuhan"}
               </span>
             </div>
 
             <div className="flex justify-between items-center text-[11px]">
-              <span className="text-slate-400 flex items-center gap-1">
-                <Calendar className="w-3 h-3 text-slate-500" /> Tanggal
+              <span className="text-slate-500 flex items-center gap-1 font-medium">
+                <Calendar className="w-3 h-3 text-slate-400" /> Tanggal
               </span>
-              <span className="text-slate-400">{date}</span>
+              <span className="font-semibold text-slate-600">{date}</span>
             </div>
           </div>
         </div>
@@ -250,11 +249,11 @@ export default function TransactionConfirmCard({
 
       {/* Peringatan jika saldo akun kurang */}
       {selectedAccountObj && initialData.type === "expense" && amount > Number(selectedAccountObj.balance) && !isSaved && (
-        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-start gap-2">
-          <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+        <div className="p-3 rounded-2xl neu-flat border-l-4 border-amber-500 text-amber-900 text-xs flex items-start gap-2.5">
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
-            <p className="font-semibold text-amber-300">Nominal Melebihi Saldo</p>
-            <p className="text-[11px] text-amber-300/80 leading-relaxed">
+            <p className="font-bold text-amber-900">Nominal Melebihi Saldo</p>
+            <p className="text-[11px] text-amber-800 leading-relaxed font-medium">
               Nominal {formatRupiah(amount)} melebihi saldo {selectedAccountObj.name} ({formatRupiah(Number(selectedAccountObj.balance))}). Saldo akun akan menjadi minus jika dilanjutkan. Gunakan tombol <b>Koreksi</b> di kanan atas untuk mengedit nominal jika AI salah mendeteksi.
             </p>
           </div>
@@ -263,15 +262,15 @@ export default function TransactionConfirmCard({
 
       {/* Confirmation Action Button */}
       {isSaved ? (
-        <div className="w-full py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold text-emerald-400">
-          <CheckCircle2 className="w-4 h-4" />
+        <div className="w-full py-2.5 neu-pressed rounded-2xl flex items-center justify-center gap-1.5 text-xs font-black text-emerald-700">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           <span>Tersimpan ke Riwayat Kas</span>
         </div>
       ) : (
         <button
           onClick={handleConfirmSave}
           disabled={submitting}
-          className="w-full mt-2 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+          className="w-full mt-2 neu-btn-primary font-bold py-2.5 rounded-2xl text-xs text-white flex items-center justify-center gap-1.5 transition-all shadow-md disabled:opacity-50"
         >
           {submitting ? (
             <>
